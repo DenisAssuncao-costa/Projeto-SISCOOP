@@ -22,11 +22,9 @@
 O SISCOOP é uma solução de software de porte desktop , projetada especificamente para atender às demandas de gestão operacional, controle de estoque físico e mediação financeira de cooperativas e associações de artesanato ribeirinho e indígenas na Região Amazônica.
 
 caracterizaçao do Problema
-
 As cooperativas de artesanato ribeirinho no Amazonas desempenham um papel socioeconômico crucial para a subsistência de diversas famílias comunitárias. No entanto, a gestão de estoque, controle de vendas e repasses aos artesãos ainda ocorrem predominantemente de forma manual (em cadernos de anotações ou planilhas desconectadas).
 
 justificativa
-
 O desenvolvimento do SISCOOP justifica-se pela necessidade de informatizar e profissionalizar o fluxo de trabalho da cooperativa por meio de uma aplicação desktop robusta, intuitiva e totalmente independente de conexão com a internet (100% offline).
 ---
 
