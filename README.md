@@ -3,10 +3,10 @@ Sistema Desktop de Gestão de Estoque e vendas para Cooperativa de Artesanato Ri
 
 
 <!-- TÍTULO E SUBTÍTULO DO PROJETO -->
-<h1 align="center">Nome do Seu Projeto</h1>
+<h1 align="center">SISCOOP</h1>
 
 <p align="center">
-  Uma breve descrição de uma linha sobre o impacto ou propósito da aplicação.
+  Sistema Desktop de Gestão de Estoque e vendas para Cooperativa de Artesanato Ribeirinho.
 </p>
 
 <!-- MENU DE NAVEGAÇÃO INTERNO -->
@@ -48,15 +48,10 @@ Tecnologias, linguagens e ferramentas utilizadas no desenvolvimento:
 
 ---
 
-## 📋 Requisitos
+## 📋 RF RNF
 
-### Pré-requisitos
-Antes de começar, você precisará ter instalado em sua máquina:
-* [Git](https://git-scm.com)
-* [Node.js](https://nodejs.org/) (ou ambiente correspondente)
+## 👥 Equipe
 
-### Instalação e Execução
-
-1. **Clone este repositório:**
-   ```bash
-   git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+* [João da Silva](https://github.com/joaosilva) - *Desenvolvedor Front-end*
+* [Maria Souza](https://github.com/mariasouza) - *DBA / Banco de Dados*
+* [Carlos Eduardo](https://linkedin.com/in/carloseduardo) - *Gerente de Projeto*
