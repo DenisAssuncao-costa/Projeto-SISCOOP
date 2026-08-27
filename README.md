@@ -65,12 +65,13 @@ Tecnologias, linguagens e ferramentas utilizadas no desenvolvimento:
 
 | Código | Requisito | Descrição |
 |---|---|---|
-| RNF01 | Usabilidade | O sistema deve possuir uma interface simples e intuitiva. |
-| RNF02 | Desempenho | As operações do sistema devem ser executadas em tempo adequado. |
-| RNF03 | Segurança | O sistema deve restringir o acesso às funcionalidades conforme o nível de acesso do usuário. |
-| RNF04 | Compatibilidade | O sistema deve funcionar nos principais navegadores modernos. |
-| RNF05 | Manutenibilidade | O código deve ser organizado de forma a facilitar futuras alterações. |
+| RNF01 | Acesso offline | O sistema devera permitir o suso das principais funcionalidaes de forma offline. |
+| RNF02 | Backup automático| O sistema deverá realizar cópias de segurança automaticamente, em preriodos definidos. |
+| RNF03 | Segurança | o sistema deverá utilizar banco de dados local seguro, com proteção contra acesso indevido. |
+| RNF04 | Usabilidade | O sistema deverá possuir uma interface simples, intuitiva e de fácil utilizaçao. |
+| RNF05 | Desempenho | O sistema deverá apresentar tempo de resposta adequado para as operações de cadastro, consulta e venda. |
 
+---
 
 ## 👥 Equipe
 
