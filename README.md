@@ -10,7 +10,7 @@
   <a href="#-sobre-o-projeto">Sobre</a> •
   <a href="#-objetivos">Objetivos</a> •
   <a href="#-tecnologias">Tecnologias</a> •
-  <a href="#-requisitos">Requisitos</a> •
+  <a href="#-Requisitos Funcionais">Requisitos</a> •
   <a href="#-banco-de-dados">Banco de Dados</a> •
   <a href="#-equipe">Equipe</a>
 </p>
@@ -35,7 +35,6 @@ O desenvolvimento do SISCOOP justifica-se pela necessidade de informatizar e pro
 - [ ] **Objetivo Principal:** Desenvolver um siatema desktop para controle de estoque, vendas e produção de associados de uma cooperativa.
 - [ ] **Objetivo Secundário 1:** Permitir cadastro de associados/ Artesão e de produtos Artesanais.
 - [ ] **Objetivo Secundário 2:** Implementar melhorias através de um sistema unificado e de facíl acesso para associados.
-
 ---
 
 
@@ -52,7 +51,15 @@ Tecnologias, linguagens e ferramentas utilizadas no desenvolvimento:
 
 ---
 
-## 📋 RF RNF
+## 📋 Requisitos Funcionais
+
+| Código | Requisito | Descrição |
+|---|---|---|
+| RF01 | Cadastro do Artesão | cada cadastro deve conter número de identificação. |
+| RF02 | Cadastro de produtos | O sistema deve permitir novos produtos e categorias . |
+| RF03 | Registrar venda | O sistema devera permitir o registro de vendas via pix, débito, credito. |
+| RF04 | Controle de Estoque| O sistema deverá atualizar o estoque á cada venda. |
+| RF05 | Emitir documento fiscal | O sistema deverá permitir a emissão de nota fisal. |
 
 ## 👥 Equipe
 
