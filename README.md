@@ -11,7 +11,7 @@
   <a href="#-objetivos">Objetivos</a> •
   <a href="#-tecnologias">Tecnologias</a> •
   <a href="#-Requisitos-Funcionais">Requisitos</a> •
-  <a href="#-Banco de Dados">Banco de Dados</a> •
+  <a href="#-Banco-de-Dados">Banco de Dados</a> •
   <a href="#-equipe">Equipe</a>
 </p>
 
