@@ -73,8 +73,27 @@ Tecnologias, linguagens e ferramentas utilizadas no desenvolvimento:
 
 ---
 
+## 🗄️ Banco de Dados
+
+O sistema utiliza um banco de dados MySQL para armazenamento e
+gerenciamento das informações da aplicação.
+
+### Principais entidades
+
+- Artesao
+- Produto
+- Usuário
+- Categotia
+- Estoque
+
+📄 [Ver documentação do banco de dados](docs/banco-de-dados.md)
+
+💾 [Arquivo SQL do banco](database/banco.sql)
+
+---
+
 ## 👥 Equipe
 
-* [João da Silva](https://github.com/joaosilva) - *Desenvolvedor Front-end*
-* [Maria Souza](https://github.com/mariasouza) - *DBA / Banco de Dados*
-* [Carlos Eduardo](https://linkedin.com/in/carloseduardo) - *Gerente de Projeto*
+* [Marcelo Aguiar](https://github.com/joaosilva) - *Desenvolvedor Front-end*
+* [Denis Assunção](https://github.com/mariasouza) - *Banco de Dados*
+* [Ewerton Lima](https://linkedin.com/in/carloseduardo) - 
