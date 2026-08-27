@@ -32,9 +32,9 @@ O desenvolvimento do SISCOOP justifica-se pela necessidade de informatizar e pro
 
 ## 🎯 Objetivos
 
-- [ ] **Objetivo Principal:** Descrição detalhada da meta central do sistema.
-- [ ] **Objetivo Secundário 1:** Entrega ou funcionalidade específica.
-- [ ] **Objetivo Secundário 2:** Melhora em performance, UX ou arquitetura.
+- [ ] **Objetivo Principal:** Desenvolver um siatema desktop para controle de estoque, vendas e produção de associados de uma cooperativa.
+- [ ] **Objetivo Secundário 1:** Permitir cadastro de associados/ Artesão e de produtos Artesanais.
+- [ ] **Objetivo Secundário 2:** Implementar melhorias através de um sistema unificado e de facíl acesso para associados.
 
 ---
 
