@@ -95,5 +95,5 @@ gerenciamento das informações da aplicação.
 ## 👥 Equipe
 
 * [Marcelo Aguiar](https://github.com/joaosilva) - *Desenvolvedor Front-end*
-* [Denis Assunção](https://github.com/mariasouza) - *Banco de Dados*
+* [Denis Assunção](https://github.com/DenisAssuncao-costa) - *Banco de Dados*
 * [Ewerton Lima](https://linkedin.com/in/carloseduardo) - 
