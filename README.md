@@ -10,7 +10,7 @@
   <a href="#-sobre-o-projeto">Sobre</a> •
   <a href="#-objetivos">Objetivos</a> •
   <a href="#-tecnologias">Tecnologias</a> •
-  <a href="#-Requisitos Funcionais">Requisitos</a> •
+  <a href="#-Requisitos-Funcionais">Requisitos</a> •
   <a href="#-banco-de-dados">Banco de Dados</a> •
   <a href="#-equipe">Equipe</a>
 </p>
