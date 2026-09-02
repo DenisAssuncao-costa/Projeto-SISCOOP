@@ -1,99 +1,124 @@
+# SISCOOP
+### Sistema de Gestão de Estoque e Venda para Cooperativa de Artesanato Ribeirinho
 
-<h1 align="center">SISCOOP</h1>
-
-<p align="center">
-  Sistema Desktop de Gestão de Estoque e vendas para Cooperativa de Artesanato Ribeirinho.
-</p>
-
-<!-- MENU DE NAVEGAÇÃO INTERNO -->
-<p align="center">
-  <a href="#-sobre-o-projeto">Sobre</a> •
-  <a href="#-objetivos">Objetivos</a> •
-  <a href="#-tecnologias">Tecnologias</a> •
-  <a href="#-Requisitos-Funcionais">Requisitos</a> •
-  <a href="#banco-de-dados">Banco de Dados</a> •
-  <a href="#-equipe">Equipe</a>
-</p>
+Aplicativo **desktop**, feito com **Electron + Node.js + SQLite (better-sqlite3)**,
+desenvolvido com base no Relatório Técnico da Prática Profissional Supervisionada
+(CETAM – Escola de Educação Profissional Galileia).
 
 ---
 
-## 📌 Sobre o Projeto
+## ✅ O que foi implementado
 
-O SISCOOP é uma solução de software de porte desktop , projetada especificamente para atender às demandas de gestão operacional, controle de estoque físico e mediação financeira de cooperativas e associações de artesanato ribeirinho e indígenas na Região Amazônica.
+- **100% offline** — banco de dados SQLite embarcado em um único arquivo local, sem
+  necessidade de internet ou servidor externo.
+- **Janela maximizada automaticamente**, ocupando toda a área útil da tela do desktop.
+- **Login com dois perfis de acesso**:
+  - **Administrador** — acesso total (cadastros, PDV, estoque, usuários, relatórios de
+    repasse, auditoria, backup/restauração).
+  - **Operador/Vendedor** — acesso restrito ao Ponto de Venda, consulta de estoque
+    (somente leitura), histórico das próprias vendas e ao próprio perfil.
+- **Login do administrador gravado no código-fonte** (`src/db/database.js`), criado
+  automaticamente na primeira execução. A senha pode (e deve) ser alterada pelo próprio
+  administrador em **Meu Perfil**, a qualquer momento.
+- **Paleta de cores** inspirada na floresta amazônica (verdes) e no artesanato/barro
+  regional (terracota, dourado, fibra), com tons pensados para contraste e legibilidade
+  (`src/renderer/shared/theme.css`).
+- **Banco de dados** fiel ao MER do relatório (13 tabelas + tabela de usuários com
+  senha criptografada), com índices e integridade referencial (`src/db/schema.sql`).
+- Regras de negócio do relatório implementadas e testadas:
+  - **RNG/SEG 01** — bloqueio de estoque negativo.
+  - **RNG/SEG 02** e **RNG/DES 05** — cálculo automático do repasse ao artesão e da
+    margem da cooperativa.
+  - **RNG/USA 03/04** — baixa automática de estoque na venda; consignação exige
+    consignatário e data limite.
+  - **RNG/DES 06** — vendas concluídas não podem ser editadas, apenas estornadas, com
+    motivo obrigatório e log de auditoria.
+  - **RNG/CUS 07** — bloqueio de CPF/código de identificação duplicado de artesão.
+  - **RF01–RF08 / RNF01–RNF06** — cadastros, PDV, alertas de estoque mínimo,
+    histórico de vendas, comprovante interno, backup e restauração.
+- **Comprovante de venda em PDF (RF08)** — gerado 100% localmente (sem internet),
+  com dados da venda, itens, total e informações de consignação quando aplicável.
+  Disponível no botão "Baixar em PDF" ao finalizar uma venda ou ao consultar o
+  histórico de vendas.
+- **Gráficos no Painel (Dashboard)** — vendas dos últimos 7 dias (barras) e vendas
+  por categoria no mês atual (rosca/donut), desenhados com Canvas nativo do
+  navegador — sem nenhuma biblioteca externa, mantendo o app 100% offline.
 
-caracterizaçao do Problema.
+## 🔐 Acesso padrão do Administrador
 
-As cooperativas de artesanato ribeirinho no Amazonas desempenham um papel socioeconômico crucial para a subsistência de diversas famílias comunitárias. No entanto, a gestão de estoque, controle de vendas e repasses aos artesãos ainda ocorrem predominantemente de forma manual (em cadernos de anotações ou planilhas desconectadas).
+```
+Login: admin
+Senha: siscoop@2026
+```
+Altere a senha assim que possível em **Meu Perfil**.
 
-justificativa.
+## ▶️ Como executar
 
-O desenvolvimento do SISCOOP justifica-se pela necessidade de informatizar e profissionalizar o fluxo de trabalho da cooperativa por meio de uma aplicação desktop robusta, intuitiva e totalmente independente de conexão com a internet (100% offline).
+Pré-requisito: [Node.js](https://nodejs.org) instalado (versão 18 ou superior).
 
+```bash
+npm install
+npm run rebuild   # recompila o better-sqlite3 para a versão nativa do Electron (rodar 1x após o install)
+npm start
+```
 
-## 🎯 Objetivos
+> **Por que o passo `npm run rebuild` é necessário?** O SQLite é um módulo nativo
+> (compilado em C). Ele precisa ser recompilado especificamente para a versão do
+> Electron usada pelo projeto — isso é padrão em qualquer app Electron que usa
+> `better-sqlite3`, e foi testado neste ambiente antes da entrega.
 
-- [ ] **Objetivo Principal:** Desenvolver um siatema desktop para controle de estoque, vendas e produção de associados de uma cooperativa.
-- [ ] **Objetivo Secundário 1:** Permitir cadastro de associados/ Artesão e de produtos Artesanais.
-- [ ] **Objetivo Secundário 2:** Implementar melhorias através de um sistema unificado e de facíl acesso para associados.
----
+O aplicativo abre direto na tela de login, já maximizado.
 
+## 📄 Comprovante em PDF
 
-## 🛠 Tecnologias
+Ao finalizar uma venda no PDV (ou ao consultar uma venda antiga em **Vendas &
+Consignações** / **Minhas Vendas**), clique em **⬇️ Baixar em PDF** no comprovante.
+Você escolhe onde salvar, e o PDF abre automaticamente no leitor padrão do
+computador. Funciona sem internet.
 
-Tecnologias, linguagens e ferramentas utilizadas no desenvolvimento:
+## 📊 Gráficos do Painel
 
-| Categoria | Tecnologia | Versão / Observação |
-| :--- | :--- | :--- |
-| **Linguagem** | Insira aqui | ex: TypeScript / Java / Python |
-| **Framework** | Insira aqui | ex: React / NestJS / Django |
-| **Estilização** | Insira aqui | ex: Tailwind CSS / Styled Components |
-| **Outros** | Insira aqui | ex: Docker / Jest |
+O Painel (Dashboard) do Administrador agora traz:
+- **Vendas nos últimos 7 dias** (gráfico de barras)
+- **Vendas por categoria no mês atual** (gráfico de rosca com legenda e percentuais)
 
----
+## 💾 Backup e Restauração
 
-## 📋 Requisitos Funcionais
+Em **Backup & Restauração** (menu do Administrador):
+- **Exportar Backup** salva um arquivo `.db` onde você quiser (pendrive, HD externo).
+- **Restaurar Backup** substitui os dados atuais pelos de um arquivo `.db`
+  selecionado e reinicia o aplicativo automaticamente.
 
-| Código | Requisito | Descrição |
-|---|---|---|
-| RF01 | Cadastro do Artesão | cada cadastro deve conter número de identificação. |
-| RF02 | Cadastro de produtos | O sistema deve permitir novos produtos e categorias . |
-| RF03 | Registrar venda | O sistema devera permitir o registro de vendas via pix, débito, credito. |
-| RF04 | Controle de Estoque| O sistema deverá atualizar o estoque á cada venda. |
-| RF05 | Emitir documento fiscal | O sistema deverá permitir a emissão de nota fisal. |
+## 📁 Estrutura do projeto
 
-## 🔒 Requisitos Não Funcionais
+```
+siscoop/
+├── main.js                 # processo principal do Electron (janela, IPC)
+├── preload.js               # ponte segura entre a interface e o banco de dados
+├── package.json
+└── src/
+    ├── db/
+    │   ├── schema.sql        # estrutura do banco (MER do relatório)
+    │   ├── database.js       # toda a lógica de negócio e consultas SQL
+    │   └── hash.js           # hash de senha (scrypt + salt)
+    ├── pdf/
+    │   └── comprovante.js     # geração do comprovante de venda em PDF (pdfkit)
+    └── renderer/
+        ├── login.html         # tela de autenticação
+        ├── shared/            # tema visual, layout, gráficos e utilitários de UI
+        ├── admin/             # painel completo do Administrador
+        └── vendedor/          # painel do Operador (PDV, estoque, perfil)
+```
 
-| Código | Requisito | Descrição |
-|---|---|---|
-| RNF01 | Acesso offline | O sistema devera permitir o suso das principais funcionalidaes de forma offline. |
-| RNF02 | Backup automático| O sistema deverá realizar cópias de segurança automaticamente, em preriodos definidos. |
-| RNF03 | Segurança | o sistema deverá utilizar banco de dados local seguro, com proteção contra acesso indevido. |
-| RNF04 | Usabilidade | O sistema deverá possuir uma interface simples, intuitiva e de fácil utilizaçao. |
-| RNF05 | Desempenho | O sistema deverá apresentar tempo de resposta adequado para as operações de cadastro, consulta e venda. |
+## 🖥️ Empacotar como instalador (.exe/.AppImage) — opcional
 
----
+Para distribuir o SISCOOP como um instalador de verdade (sem precisar do Node.js
+instalado no computador de destino), é possível usar o `electron-builder`:
 
-## 🗄️ Banco de Dados
+```bash
+npm install --save-dev electron-builder
+npx electron-builder --win   # ou --linux / --mac
+```
 
-O sistema utiliza um banco de dados MySQL para armazenamento e
-gerenciamento das informações da aplicação.
-
-### Principais entidades
-
-- Artesao
-- Produto
-- Usuário
-- Categotia
-- Estoque
-
-📄 [Ver documentação do banco de dados](docs/banco-de-dados.md)
-
-💾 [Arquivo SQL do banco](database/banco.sql)
-
----
-
-## 👥 Equipe
-
-* [Marcelo Aguiar](https://github.com/joaosilva) - *Desenvolvedor Front-end*
-* [Denis Assunção](https://github.com/DenisAssuncao-costa) - *Banco de Dados*
-* [Ewerton Lima](https://linkedin.com/in/carloseduardo) - 
+Isso não foi incluído por padrão para manter o pacote enxuto, mas o projeto já está
+pronto para essa etapa.
