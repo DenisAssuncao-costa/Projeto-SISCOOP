@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SISCOOP - Administração</title>
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="../shared/layout.css">
+<style>
+  .pdv-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; align-items: start; }
+  .grid-graficos { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .grid-graficos > .painel:last-child { min-width: 320px; }
+  @media (max-width: 980px) { .grid-graficos { grid-template-columns: 1fr; } }
+  .pdv-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
+  .pdv-produto-card {
+    padding: 12px; cursor: pointer; transition: transform .1s ease, box-shadow .1s ease;
+  }
+  .pdv-produto-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(22,48,42,.15); }
+  .pdv-produto-card .nome { font-weight: 700; font-size: 13.5px; color: var(--texto); margin-bottom: 4px; }
+  .pdv-produto-card .cat { font-size: 11px; color: var(--texto-suave); margin-bottom: 8px; }
+  .pdv-produto-card .preco { font-weight: 800; color: var(--floresta); }
+  .pdv-produto-card .estoque { font-size: 11px; color: var(--texto-suave); }
+  .carrinho-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--borda); }
+  .carrinho-item .info { flex: 1; }
+  .carrinho-item .info .n { font-size: 13px; font-weight: 600; }
+  .carrinho-item .info .p { font-size: 11.5px; color: var(--texto-suave); }
+  .carrinho-item .qtd-controle { display: flex; align-items: center; gap: 6px; }
+  .carrinho-item .qtd-controle button { width: 24px; height: 24px; padding: 0; background: var(--bg); color: var(--floresta); font-weight: 800; }
+  .total-linha { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; }
+  .total-linha.grande { font-size: 19px; font-weight: 800; color: var(--floresta-escura); border-top: 2px solid var(--borda); margin-top: 6px; padding-top: 12px; }
+  .perfil-avatar-grande {
+    width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 14px auto;
+    background: linear-gradient(135deg, var(--terra-clara), var(--dourado));
+    display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 26px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="marca">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="31" stroke="#d4a94f" stroke-width="2"/>
+        <path d="M32 46C32 46 18 38.5 18 26.5C18 20.7 22.7 16 28.5 16C30.5 16 32 17 32 17C32 17 33.5 16 35.5 16C41.3 16 46 20.7 46 26.5C46 38.5 32 46 32 46Z" fill="#6fa886"/>
+        <path d="M32 46V24" stroke="#234d3d" stroke-width="2"/>
+      </svg>
+      <div>
+        <div class="nome">SISCOOP</div>
+        <div class="papel">Administração</div>
+      </div>
+    </div>
+
+    <nav id="navegacao">
+      <div class="nav-secao">Visão geral</div>
+      <div class="nav-item" data-secao="secao-dashboard"><span class="emoji">📊</span> Painel</div>
+
+      <div class="nav-secao">Operação</div>
+      <div class="nav-item" data-secao="secao-pdv"><span class="emoji">🛒</span> Ponto de Venda</div>
+      <div class="nav-item" data-secao="secao-vendas"><span class="emoji">🧾</span> Vendas &amp; Consignações</div>
+      <div class="nav-item" data-secao="secao-repasse"><span class="emoji">🤝</span> Repasse aos Artesãos</div>
+
+      <div class="nav-secao">Cadastros</div>
+      <div class="nav-item" data-secao="secao-produtos"><span class="emoji">🎨</span> Produtos &amp; Estoque <span id="badgeCritico" class="badge-critico-nav" style="display:none;">0</span></div>
+      <div class="nav-item" data-secao="secao-artesaos"><span class="emoji">🧑‍🎨</span> Artesãos</div>
+      <div class="nav-item" data-secao="secao-categorias"><span class="emoji">🏷️</span> Categorias</div>
+      <div class="nav-item" data-secao="secao-materiaprima"><span class="emoji">🧵</span> Matéria-Prima &amp; Compras</div>
+
+      <div class="nav-secao">Administração</div>
+      <div class="nav-item" data-secao="secao-usuarios"><span class="emoji">👥</span> Usuários</div>
+      <div class="nav-item" data-secao="secao-auditoria"><span class="emoji">🛡️</span> Auditoria</div>
+      <div class="nav-item" data-secao="secao-backup"><span class="emoji">💾</span> Backup &amp; Restauração</div>
+      <div class="nav-item" data-secao="secao-perfil"><span class="emoji">⚙️</span> Meu Perfil</div>
+    </nav>
+
+    <div class="sidebar-rodape">
+      <div class="nav-item" id="btnSair" style="padding-left:0;">
+        <span class="emoji">🚪</span> Sair
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ ÁREA PRINCIPAL ============ -->
+  <div class="principal">
+    <header class="topbar">
+      <h1 id="tituloTopbar">Painel</h1>
+      <div class="usuario-chip" data-secao-alvo="secao-perfil">
+        <div class="info">
+          <div class="nome" id="chipNome">-</div>
+          <div class="papel" id="chipPapel">-</div>
+        </div>
+        <div class="avatar" id="chipAvatar">?</div>
+      </div>
+    </header>
+
+    <main class="conteudo">
+
+      <!-- ---------- DASHBOARD ---------- -->
+      <section class="secao ativa" id="secao-dashboard">
+        <div class="cabecalho-secao">
+          <div><h2>Painel Geral</h2><p>Resumo das operações da cooperativa em tempo real.</p></div>
+        </div>
+        <div class="grid-cards">
+          <div class="card card-metrica"><div class="rotulo">Vendas Hoje</div><div class="valor" id="mVendasHoje">R$ 0,00</div></div>
+          <div class="card card-metrica"><div class="rotulo">Nº de Vendas Hoje</div><div class="valor" id="mQtdHoje">0</div></div>
+          <div class="card card-metrica"><div class="rotulo">Vendas no Mês</div><div class="valor" id="mVendasMes">R$ 0,00</div></div>
+          <div class="card card-metrica"><div class="rotulo">Produtos Ativos</div><div class="valor" id="mProdutos">0</div></div>
+          <div class="card card-metrica"><div class="rotulo">Artesãos Ativos</div><div class="valor" id="mArtesoes">0</div></div>
+          <div class="card card-metrica"><div class="rotulo">Estoque Crítico</div><div class="valor alerta" id="mCritico">0</div></div>
+        </div>
+
+        <div class="grid-graficos">
+          <div class="card painel">
+            <h3>📈 Vendas nos Últimos 7 Dias</h3>
+            <canvas id="graficoVendasDia" style="width:100%; height:220px;"></canvas>
+          </div>
+          <div class="card painel">
+            <h3>🥧 Vendas por Categoria (mês atual)</h3>
+            <div style="display:flex; gap:14px; align-items:center;">
+              <canvas id="graficoVendasCategoria" style="width:100%; height:180px; flex:1.3;"></canvas>
+              <div id="legendaVendasCategoria" style="flex:1; min-width:130px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card painel">
+          <h3>⚠️ Produtos com estoque no nível crítico</h3>
+          <div class="tabela-wrap"><table id="tabelaCriticos">
+            <thead><tr><th>Produto</th><th>Estoque Atual</th><th>Estoque Mínimo</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- PDV ---------- -->
+      <section class="secao" id="secao-pdv">
+        <div class="cabecalho-secao">
+          <div><h2>Ponto de Venda</h2><p>Selecione os produtos, defina a forma de pagamento e finalize a venda.</p></div>
+        </div>
+        <div class="pdv-grid">
+          <div>
+            <div class="barra-ferramentas">
+              <input type="text" id="buscaPdv" placeholder="🔎 Buscar produto por nome...">
+              <select id="filtroCategoriaPdv"><option value="">Todas as categorias</option></select>
+            </div>
+            <div class="pdv-produtos" id="listaPdvProdutos"></div>
+          </div>
+          <div class="card painel" style="position:sticky; top:0;">
+            <h3>🛒 Carrinho</h3>
+            <div id="carrinhoLista"><div class="vazio">Nenhum item adicionado.</div></div>
+            <div class="total-linha grande"><span>Total</span><span id="carrinhoTotal">R$ 0,00</span></div>
+
+            <div class="campo">
+              <label>Tipo de Venda</label>
+              <select id="tipoVenda">
+                <option value="A_VISTA">À vista</option>
+                <option value="CONSIGNADO">Consignado</option>
+              </select>
+            </div>
+            <div id="camposConsignacao" style="display:none;">
+              <div class="campo"><label>Consignatário</label><input type="text" id="consignatario" placeholder="Nome do consignatário"></div>
+              <div class="campo"><label>Data limite para acerto</label><input type="date" id="dataLimiteConsignacao"></div>
+            </div>
+            <div class="campo">
+              <label>Forma de Pagamento</label>
+              <select id="formaPagamento">
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="PIX">PIX</option>
+                <option value="DEBITO">Cartão de Débito</option>
+                <option value="CREDITO">Cartão de Crédito</option>
+              </select>
+            </div>
+            <button class="btn-primario" id="btnFinalizarVenda" style="width:100%;">Finalizar Venda</button>
+            <button class="btn-secundario" id="btnLimparCarrinho" style="width:100%; margin-top:8px;">Limpar Carrinho</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- VENDAS / HISTORICO ---------- -->
+      <section class="secao" id="secao-vendas">
+        <div class="cabecalho-secao">
+          <div><h2>Vendas &amp; Consignações</h2><p>Histórico de vendas, comprovantes e estornos.</p></div>
+        </div>
+        <div class="barra-ferramentas">
+          <label style="margin:0;">De</label><input type="date" id="filtroDataInicioVendas">
+          <label style="margin:0;">Até</label><input type="date" id="filtroDataFimVendas">
+          <button class="btn-secundario" id="btnFiltrarVendas">Filtrar</button>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaVendas">
+            <thead><tr><th>Nº</th><th>Data</th><th>Vendedor</th><th>Tipo</th><th>Pagamento</th><th>Total</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- REPASSE ---------- -->
+      <section class="secao" id="secao-repasse">
+        <div class="cabecalho-secao">
+          <div><h2>Repasse aos Artesãos</h2><p>Cálculo automático do valor devido a cada associado por período.</p></div>
+        </div>
+        <div class="barra-ferramentas">
+          <label style="margin:0;">De</label><input type="date" id="repasseInicio">
+          <label style="margin:0;">Até</label><input type="date" id="repasseFim">
+          <button class="btn-secundario" id="btnCalcularRepasse">Calcular</button>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaRepasse">
+            <thead><tr><th>Artesão</th><th>Itens Vendidos</th><th>Valor Vendido</th><th>Margem da Cooperativa</th><th>Valor de Repasse</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- PRODUTOS / ESTOQUE ---------- -->
+      <section class="secao" id="secao-produtos">
+        <div class="cabecalho-secao">
+          <div><h2>Produtos &amp; Estoque</h2><p>Cadastro de produtos, preços e controle de quantidade em estoque.</p></div>
+          <button class="btn-primario" id="btnNovoProduto">+ Novo Produto</button>
+        </div>
+        <div class="barra-ferramentas">
+          <input type="text" id="buscaProduto" placeholder="🔎 Buscar produto...">
+          <label style="margin:0; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="mostrarInativosProduto" style="width:auto;"> Mostrar inativos</label>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaProdutos">
+            <thead><tr><th>Produto</th><th>Artesão</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Mínimo</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- ARTESAOS ---------- -->
+      <section class="secao" id="secao-artesaos">
+        <div class="cabecalho-secao">
+          <div><h2>Artesãos Associados</h2><p>Cadastro dos produtores vinculados à cooperativa.</p></div>
+          <button class="btn-primario" id="btnNovoArtesao">+ Novo Artesão</button>
+        </div>
+        <div class="barra-ferramentas">
+          <label style="margin:0; display:flex; align-items:center; gap:6px;"><input type="checkbox" id="mostrarInativosArtesao" style="width:auto;"> Mostrar inativos</label>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaArtesoes">
+            <thead><tr><th>Código</th><th>Nome</th><th>CPF</th><th>Contato</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- CATEGORIAS ---------- -->
+      <section class="secao" id="secao-categorias">
+        <div class="cabecalho-secao">
+          <div><h2>Categorias de Produtos</h2><p>Organize os tipos de artesanato produzidos pela cooperativa.</p></div>
+          <button class="btn-primario" id="btnNovaCategoria">+ Nova Categoria</button>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaCategorias">
+            <thead><tr><th>Nome</th><th>Descrição</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- MATERIA PRIMA / COMPRAS ---------- -->
+      <section class="secao" id="secao-materiaprima">
+        <div class="cabecalho-secao">
+          <div><h2>Matéria-Prima &amp; Lista de Compras</h2><p>Controle dos insumos necessários para produção.</p></div>
+          <button class="btn-primario" id="btnNovaMateria">+ Nova Matéria-Prima</button>
+        </div>
+        <div class="card painel">
+          <h3>🧵 Matérias-Primas Cadastradas</h3>
+          <div class="tabela-wrap"><table id="tabelaMaterias">
+            <thead><tr><th>Nome</th><th>Unidade</th><th>Qtd. Disponível</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+        <div class="card painel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0;">📋 Listas de Compra</h3>
+            <button class="btn-secundario" id="btnNovaLista">+ Nova Lista</button>
+          </div>
+          <div class="tabela-wrap"><table id="tabelaListas">
+            <thead><tr><th>Nº</th><th>Criada por</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- USUARIOS ---------- -->
+      <section class="secao" id="secao-usuarios">
+        <div class="cabecalho-secao">
+          <div><h2>Usuários do Sistema</h2><p>Gerencie os acessos de administradores e operadores (vendedores).</p></div>
+          <button class="btn-primario" id="btnNovoUsuario">+ Novo Usuário</button>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaUsuarios">
+            <thead><tr><th>Nome</th><th>Login</th><th>Nível de Acesso</th><th>Status</th><th>Criado em</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- AUDITORIA ---------- -->
+      <section class="secao" id="secao-auditoria">
+        <div class="cabecalho-secao">
+          <div><h2>Log de Auditoria</h2><p>Todas as movimentações de estoque, incluindo estornos, com data, produto e responsável (RNG/DES 06).</p></div>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaAuditoria">
+            <thead><tr><th>Data</th><th>Produto</th><th>Tipo</th><th>Quantidade</th><th>Responsável</th><th>Observação</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- BACKUP ---------- -->
+      <section class="secao" id="secao-backup">
+        <div class="cabecalho-secao">
+          <div><h2>Backup &amp; Restauração</h2><p>O SISCOOP funciona 100% offline. Faça cópias de segurança regularmente.</p></div>
+        </div>
+        <div class="grid-cards">
+          <div class="card painel">
+            <h3>💾 Exportar Cópia de Segurança</h3>
+            <p style="color:var(--texto-suave); font-size:13px;">Gera um arquivo <code>.db</code> com todos os dados atuais do sistema. Guarde-o em um pendrive ou HD externo.</p>
+            <button class="btn-primario" id="btnExportarBackup">Exportar Backup</button>
+          </div>
+          <div class="card painel">
+            <h3>♻️ Restaurar Cópia de Segurança</h3>
+            <p style="color:var(--texto-suave); font-size:13px;">Substitui os dados atuais pelos dados de um arquivo <code>.db</code> selecionado. O sistema será reiniciado automaticamente.</p>
+            <button class="btn-secundario" id="btnRestaurarBackup">Restaurar Backup</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- PERFIL ---------- -->
+      <section class="secao" id="secao-perfil">
+        <div class="cabecalho-secao">
+          <div><h2>Meu Perfil</h2><p>Gerencie seus dados de acesso.</p></div>
+        </div>
+        <div class="card painel" style="max-width:420px;">
+          <div class="perfil-avatar-grande" id="perfilAvatar">?</div>
+          <div style="text-align:center; margin-bottom:18px;">
+            <div style="font-weight:800; font-size:16px;" id="perfilNome">-</div>
+            <div style="color:var(--texto-suave); font-size:13px;" id="perfilLogin">-</div>
+          </div>
+          <h3>Alterar Senha</h3>
+          <div class="campo"><label>Senha Atual</label><input type="password" id="senhaAtual"></div>
+          <div class="campo"><label>Nova Senha</label><input type="password" id="novaSenha" placeholder="mínimo 6 caracteres"></div>
+          <div class="campo"><label>Confirmar Nova Senha</label><input type="password" id="confirmaSenha"></div>
+          <button class="btn-primario" id="btnAlterarSenha" style="width:100%;">Salvar Nova Senha</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ MODAIS ============ -->
+
+<div class="overlay-modal" id="modalArtesao">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3 id="tituloModalArtesao">Novo Artesão</h3><button class="btn-icone" onclick="fecharModal('modalArtesao')">✕</button></div>
+    <div class="modal-corpo">
+      <input type="hidden" id="artesaoId">
+      <div class="campo"><label>Código de Identificação</label><input type="text" id="artesaoCodigo" placeholder="ex: ART-001"></div>
+      <div class="campo"><label>Nome Completo</label><input type="text" id="artesaoNome"></div>
+      <div class="campo"><label>CPF</label><input type="text" id="artesaoCpf" placeholder="000.000.000-00"></div>
+      <div class="campo"><label>Contato (telefone)</label><input type="text" id="artesaoContato"></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalArtesao')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarArtesao">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalCategoria">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3 id="tituloModalCategoria">Nova Categoria</h3><button class="btn-icone" onclick="fecharModal('modalCategoria')">✕</button></div>
+    <div class="modal-corpo">
+      <input type="hidden" id="categoriaId">
+      <div class="campo"><label>Nome</label><input type="text" id="categoriaNome"></div>
+      <div class="campo"><label>Descrição</label><textarea id="categoriaDescricao" rows="3"></textarea></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalCategoria')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarCategoria">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalProduto">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3 id="tituloModalProduto">Novo Produto</h3><button class="btn-icone" onclick="fecharModal('modalProduto')">✕</button></div>
+    <div class="modal-corpo">
+      <input type="hidden" id="produtoId">
+      <div class="campo"><label>Nome do Produto</label><input type="text" id="produtoNome"></div>
+      <div class="grid-2">
+        <div class="campo"><label>Artesão</label><select id="produtoArtesao"></select></div>
+        <div class="campo"><label>Categoria</label><select id="produtoCategoria"></select></div>
+      </div>
+      <div class="campo"><label>Matéria-Prima Utilizada</label><input type="text" id="produtoMateriaPrima"></div>
+      <div class="campo"><label>Descrição</label><textarea id="produtoDescricao" rows="2"></textarea></div>
+      <div class="grid-2">
+        <div class="campo"><label>Preço de Custo / Repasse (R$)</label><input type="number" step="0.01" min="0" id="produtoPrecoCusto"></div>
+        <div class="campo"><label>Preço de Venda (R$)</label><input type="number" step="0.01" min="0" id="produtoPreco"></div>
+      </div>
+      <div class="campo"><label>Estoque Mínimo</label><input type="number" min="0" id="produtoEstoqueMinimo" value="5"></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalProduto')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarProduto">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalEstoque">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3>Movimentar Estoque</h3><button class="btn-icone" onclick="fecharModal('modalEstoque')">✕</button></div>
+    <div class="modal-corpo">
+      <input type="hidden" id="estoqueProdutoId">
+      <p style="font-size:13.5px; color:var(--texto-suave);">Produto: <b id="estoqueProdutoNome">-</b> — Estoque atual: <b id="estoqueProdutoAtual">0</b></p>
+      <div class="campo">
+        <label>Tipo de Movimentação</label>
+        <select id="estoqueTipo">
+          <option value="ENTRADA">Entrada (recebimento do artesão)</option>
+          <option value="SAIDA">Saída manual</option>
+          <option value="AJUSTE">Ajuste de inventário</option>
+        </select>
+      </div>
+      <div class="campo"><label>Quantidade</label><input type="number" min="1" id="estoqueQuantidade" value="1"></div>
+      <div class="campo"><label>Observação</label><input type="text" id="estoqueObservacao"></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalEstoque')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarEstoque">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalUsuario">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3>Novo Usuário</h3><button class="btn-icone" onclick="fecharModal('modalUsuario')">✕</button></div>
+    <div class="modal-corpo">
+      <div class="campo"><label>Nome Completo</label><input type="text" id="usuarioNome"></div>
+      <div class="campo"><label>Login</label><input type="text" id="usuarioLogin"></div>
+      <div class="campo"><label>Senha Inicial</label><input type="password" id="usuarioSenha" placeholder="mínimo 6 caracteres"></div>
+      <div class="campo">
+        <label>Nível de Acesso</label>
+        <select id="usuarioNivel">
+          <option value="VENDEDOR">Operador (Vendedor)</option>
+          <option value="ADMINISTRADOR">Administrador</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalUsuario')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarUsuario">Criar Usuário</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalMateria">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3 id="tituloModalMateria">Nova Matéria-Prima</h3><button class="btn-icone" onclick="fecharModal('modalMateria')">✕</button></div>
+    <div class="modal-corpo">
+      <input type="hidden" id="materiaId">
+      <div class="campo"><label>Nome</label><input type="text" id="materiaNome"></div>
+      <div class="grid-2">
+        <div class="campo"><label>Unidade de Medida</label><input type="text" id="materiaUnidade" placeholder="kg, m, unid..."></div>
+        <div class="campo"><label>Qtd. Disponível</label><input type="number" step="0.01" min="0" id="materiaQuantidade" value="0"></div>
+      </div>
+      <div class="campo"><label>Descrição</label><textarea id="materiaDescricao" rows="2"></textarea></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalMateria')">Cancelar</button>
+      <button class="btn-primario" id="btnSalvarMateria">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalItensLista">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3>Itens da Lista #<span id="listaNumero"></span></h3><button class="btn-icone" onclick="fecharModal('modalItensLista')">✕</button></div>
+    <div class="modal-corpo">
+      <div class="grid-2" style="margin-bottom:12px;">
+        <div class="campo"><label>Matéria-Prima</label><select id="itemListaMateria"></select></div>
+        <div class="campo"><label>Quantidade Desejada</label><input type="number" step="0.01" min="0.01" id="itemListaQuantidade"></div>
+      </div>
+      <button class="btn-secundario" id="btnAddItemLista" style="margin-bottom:16px;">+ Adicionar Item</button>
+      <div class="tabela-wrap"><table id="tabelaItensLista">
+        <thead><tr><th>Matéria-Prima</th><th>Qtd. Desejada</th><th>Unidade</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" onclick="fecharModal('modalItensLista')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalComprovante">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3>Comprovante da Venda</h3><button class="btn-icone" onclick="fecharModal('modalComprovante')">✕</button></div>
+    <div class="modal-corpo" id="corpoComprovante"></div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" id="btnBaixarPdfComprovante" style="display:none;">⬇️ Baixar em PDF</button>
+      <button class="btn-primario" onclick="fecharModal('modalComprovante')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/ui.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

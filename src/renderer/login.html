@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SISCOOP - Entrar</title>
+<link rel="stylesheet" href="shared/theme.css">
+<style>
+  html, body { overflow: auto; }
+  .tela-login {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(143,174,107,0.35), transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(212,169,79,0.25), transparent 50%),
+      linear-gradient(150deg, var(--floresta-escura) 0%, var(--floresta) 45%, var(--terra-escura) 130%);
+  }
+
+  /* Painel esquerdo - identidade / storytelling */
+  .painel-marca {
+    flex: 1.15;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 6vw;
+    color: var(--fibra);
+    position: relative;
+    overflow: hidden;
+  }
+  .painel-marca::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.035) 0 2px, transparent 2px 60px);
+    pointer-events: none;
+  }
+  .selo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .selo svg { width: 46px; height: 46px; }
+  .selo span {
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    color: var(--musgo);
+    text-transform: uppercase;
+  }
+  .painel-marca h1 {
+    font-size: 46px;
+    margin: 0 0 6px 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .painel-marca h1 small {
+    display: block;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--fibra);
+    letter-spacing: .3px;
+    margin-top: 10px;
+    max-width: 520px;
+    line-height: 1.5;
+  }
+  .destaques {
+    margin-top: 46px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 460px;
+  }
+  .destaque-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .destaque-item .ico {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+  .destaque-item b { color: #fff; display:block; font-size: 14.5px; }
+  .destaque-item span { color: var(--fibra); font-size: 13px; opacity: .85; }
+
+  /* Painel direito - formulario */
+  .painel-form {
+    flex: 1;
+    max-width: 480px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vh 60px;
+    box-shadow: -20px 0 50px rgba(0,0,0,0.25);
+  }
+  .painel-form h2 { margin: 0 0 4px 0; font-size: 26px; color: var(--floresta-escura); }
+  .painel-form .sub { color: var(--texto-suave); margin-bottom: 30px; font-size: 14px; }
+
+  .form-login .campo { margin-bottom: 18px; }
+  .input-com-icone { position: relative; }
+  .input-com-icone input { padding-left: 40px; }
+  .input-com-icone .icone-campo {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--floresta-media); font-size: 16px;
+  }
+  #btnMostrarSenha {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: transparent; color: var(--texto-suave); font-size: 12px; padding: 6px 8px;
+  }
+
+  #btnEntrar { width: 100%; padding: 13px; font-size: 15px; margin-top: 6px; }
+  #btnEntrar:disabled { opacity: .7; }
+
+  .msg-erro {
+    background: #f6e1de;
+    color: var(--erro);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    display: none;
+    border: 1px solid #e6bcb6;
+  }
+  .msg-erro.mostrar { display: block; }
+
+  .rodape-form {
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px solid var(--borda);
+    font-size: 11.5px;
+    color: var(--texto-suave);
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <div class="tela-login">
+    <div class="painel-marca">
+      <div class="selo">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="31" stroke="#d4a94f" stroke-width="2"/>
+          <path d="M32 46C32 46 18 38.5 18 26.5C18 20.7 22.7 16 28.5 16C30.5 16 32 17 32 17C32 17 33.5 16 35.5 16C41.3 16 46 20.7 46 26.5C46 38.5 32 46 32 46Z" fill="#6fa886"/>
+          <path d="M32 46V24" stroke="#234d3d" stroke-width="2"/>
+        </svg>
+        <span>CETAM &middot; Escola Galileia</span>
+      </div>
+      <h1>SISCOOP
+        <small>Sistema de Gestão de Estoque e Venda para Cooperativas de Artesanato Ribeirinho. Funciona 100% offline, do jeito que o interior precisa.</small>
+      </h1>
+      <div class="destaques">
+        <div class="destaque-item">
+          <div class="ico">📦</div>
+          <div><b>Estoque sempre sob controle</b><span>Alertas automáticos de reposição e bloqueio de saldo negativo.</span></div>
+        </div>
+        <div class="destaque-item">
+          <div class="ico">🤝</div>
+          <div><b>Repasse justo aos artesãos</b><span>Cálculo automático da margem da cooperativa e do valor devido a cada associado.</span></div>
+        </div>
+        <div class="destaque-item">
+          <div class="ico">🌐</div>
+          <div><b>Sem depender de internet</b><span>Banco de dados local (SQLite) com backup e restauração em mídia externa.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="painel-form">
+      <h2>Bem-vindo(a) de volta</h2>
+      <div class="sub">Entre com seu usuário e senha para acessar o sistema.</div>
+
+      <div class="msg-erro" id="msgErro"></div>
+
+      <form class="form-login" id="formLogin">
+        <div class="campo">
+          <label for="login">Usuário</label>
+          <div class="input-com-icone">
+            <span class="icone-campo">👤</span>
+            <input type="text" id="login" autocomplete="username" placeholder="ex: admin" required>
+          </div>
+        </div>
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <div class="input-com-icone">
+            <span class="icone-campo">🔒</span>
+            <input type="password" id="senha" autocomplete="current-password" placeholder="••••••••" required>
+            <button type="button" id="btnMostrarSenha">MOSTRAR</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-primario" id="btnEntrar">Entrar</button>
+      </form>
+
+      <div class="rodape-form">
+        Acesso do Administrador já vem configurado de fábrica.<br>
+        Após o primeiro acesso, altere sua senha em <b>Meu Perfil</b>.
+      </div>
+    </div>
+  </div>
+
+<script>
+  const form = document.getElementById('formLogin');
+  const msgErro = document.getElementById('msgErro');
+  const btnEntrar = document.getElementById('btnEntrar');
+  const inputSenha = document.getElementById('senha');
+
+  document.getElementById('btnMostrarSenha').addEventListener('click', (e) => {
+    inputSenha.type = inputSenha.type === 'password' ? 'text' : 'password';
+    e.target.textContent = inputSenha.type === 'password' ? 'MOSTRAR' : 'OCULTAR';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msgErro.classList.remove('mostrar');
+    const login = document.getElementById('login').value.trim();
+    const senha = inputSenha.value;
+    if (!login || !senha) return;
+
+    btnEntrar.disabled = true;
+    btnEntrar.textContent = 'Entrando...';
+    try {
+      const resultado = await window.siscoop.login(login, senha);
+      if (!resultado.ok) {
+        msgErro.textContent = resultado.erro || 'Não foi possível entrar.';
+        msgErro.classList.add('mostrar');
+        btnEntrar.disabled = false;
+        btnEntrar.textContent = 'Entrar';
+      }
+      // em caso de sucesso o processo principal ja troca a tela
+    } catch (err) {
+      msgErro.textContent = 'Erro inesperado: ' + err.message;
+      msgErro.classList.add('mostrar');
+      btnEntrar.disabled = false;
+      btnEntrar.textContent = 'Entrar';
+    }
+  });
+
+  document.getElementById('login').focus();
+</script>
+</body>
+</html>

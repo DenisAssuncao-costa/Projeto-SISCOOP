@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SISCOOP - Ponto de Venda</title>
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="../shared/layout.css">
+<style>
+  .pdv-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 18px; align-items: start; }
+  .pdv-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 12px; }
+  .pdv-produto-card { padding: 12px; cursor: pointer; transition: transform .1s ease, box-shadow .1s ease; }
+  .pdv-produto-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(22,48,42,.15); }
+  .pdv-produto-card .nome { font-weight: 700; font-size: 13.5px; color: var(--texto); margin-bottom: 4px; }
+  .pdv-produto-card .cat { font-size: 11px; color: var(--texto-suave); margin-bottom: 8px; }
+  .pdv-produto-card .preco { font-weight: 800; color: var(--floresta); }
+  .pdv-produto-card .estoque { font-size: 11px; color: var(--texto-suave); }
+  .carrinho-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--borda); }
+  .carrinho-item .info { flex: 1; }
+  .carrinho-item .info .n { font-size: 13px; font-weight: 600; }
+  .carrinho-item .info .p { font-size: 11.5px; color: var(--texto-suave); }
+  .carrinho-item .qtd-controle { display: flex; align-items: center; gap: 6px; }
+  .carrinho-item .qtd-controle button { width: 24px; height: 24px; padding: 0; background: var(--bg); color: var(--floresta); font-weight: 800; }
+  .total-linha { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; }
+  .total-linha.grande { font-size: 19px; font-weight: 800; color: var(--floresta-escura); border-top: 2px solid var(--borda); margin-top: 6px; padding-top: 12px; }
+  .perfil-avatar-grande {
+    width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 14px auto;
+    background: linear-gradient(135deg, var(--terra-clara), var(--dourado));
+    display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 26px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="marca">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="31" stroke="#d4a94f" stroke-width="2"/>
+        <path d="M32 46C32 46 18 38.5 18 26.5C18 20.7 22.7 16 28.5 16C30.5 16 32 17 32 17C32 17 33.5 16 35.5 16C41.3 16 46 20.7 46 26.5C46 38.5 32 46 32 46Z" fill="#6fa886"/>
+        <path d="M32 46V24" stroke="#234d3d" stroke-width="2"/>
+      </svg>
+      <div>
+        <div class="nome">SISCOOP</div>
+        <div class="papel">Operador</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-secao">Vendas</div>
+      <div class="nav-item" data-secao="secao-pdv"><span class="emoji">🛒</span> Ponto de Venda</div>
+      <div class="nav-item" data-secao="secao-minhasvendas"><span class="emoji">🧾</span> Minhas Vendas</div>
+
+      <div class="nav-secao">Consultas</div>
+      <div class="nav-item" data-secao="secao-estoque"><span class="emoji">📦</span> Consultar Estoque</div>
+
+      <div class="nav-secao">Conta</div>
+      <div class="nav-item" data-secao="secao-perfil"><span class="emoji">⚙️</span> Meu Perfil</div>
+    </nav>
+
+    <div class="sidebar-rodape">
+      <div class="nav-item" id="btnSair" style="padding-left:0;"><span class="emoji">🚪</span> Sair</div>
+    </div>
+  </aside>
+
+  <div class="principal">
+    <header class="topbar">
+      <h1 id="tituloTopbar">Ponto de Venda</h1>
+      <div class="usuario-chip" data-secao-alvo="secao-perfil">
+        <div class="info">
+          <div class="nome" id="chipNome">-</div>
+          <div class="papel">Operador</div>
+        </div>
+        <div class="avatar" id="chipAvatar">?</div>
+      </div>
+    </header>
+
+    <main class="conteudo">
+
+      <!-- ---------- PDV ---------- -->
+      <section class="secao ativa" id="secao-pdv">
+        <div class="cabecalho-secao">
+          <div><h2>Ponto de Venda</h2><p>Selecione os produtos, defina a forma de pagamento e finalize a venda.</p></div>
+        </div>
+        <div class="pdv-grid">
+          <div>
+            <div class="barra-ferramentas">
+              <input type="text" id="buscaPdv" placeholder="🔎 Buscar produto por nome...">
+              <select id="filtroCategoriaPdv"><option value="">Todas as categorias</option></select>
+            </div>
+            <div class="pdv-produtos" id="listaPdvProdutos"></div>
+          </div>
+          <div class="card painel" style="position:sticky; top:0;">
+            <h3>🛒 Carrinho</h3>
+            <div id="carrinhoLista"><div class="vazio">Nenhum item adicionado.</div></div>
+            <div class="total-linha grande"><span>Total</span><span id="carrinhoTotal">R$ 0,00</span></div>
+
+            <div class="campo">
+              <label>Tipo de Venda</label>
+              <select id="tipoVenda">
+                <option value="A_VISTA">À vista</option>
+                <option value="CONSIGNADO">Consignado</option>
+              </select>
+            </div>
+            <div id="camposConsignacao" style="display:none;">
+              <div class="campo"><label>Consignatário</label><input type="text" id="consignatario" placeholder="Nome do consignatário"></div>
+              <div class="campo"><label>Data limite para acerto</label><input type="date" id="dataLimiteConsignacao"></div>
+            </div>
+            <div class="campo">
+              <label>Forma de Pagamento</label>
+              <select id="formaPagamento">
+                <option value="DINHEIRO">Dinheiro</option>
+                <option value="PIX">PIX</option>
+                <option value="DEBITO">Cartão de Débito</option>
+                <option value="CREDITO">Cartão de Crédito</option>
+              </select>
+            </div>
+            <button class="btn-primario" id="btnFinalizarVenda" style="width:100%;">Finalizar Venda</button>
+            <button class="btn-secundario" id="btnLimparCarrinho" style="width:100%; margin-top:8px;">Limpar Carrinho</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- MINHAS VENDAS ---------- -->
+      <section class="secao" id="secao-minhasvendas">
+        <div class="cabecalho-secao">
+          <div><h2>Minhas Vendas</h2><p>Histórico das vendas realizadas por você hoje e em dias anteriores.</p></div>
+        </div>
+        <div class="barra-ferramentas">
+          <label style="margin:0;">De</label><input type="date" id="filtroDataInicioVendas">
+          <label style="margin:0;">Até</label><input type="date" id="filtroDataFimVendas">
+          <button class="btn-secundario" id="btnFiltrarVendas">Filtrar</button>
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaVendas">
+            <thead><tr><th>Nº</th><th>Data</th><th>Tipo</th><th>Pagamento</th><th>Total</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- ESTOQUE (SOMENTE CONSULTA) ---------- -->
+      <section class="secao" id="secao-estoque">
+        <div class="cabecalho-secao">
+          <div><h2>Consulta de Estoque</h2><p>Consulte a quantidade disponível de cada produto. Alterações de estoque são feitas pelo Administrador.</p></div>
+        </div>
+        <div class="barra-ferramentas">
+          <input type="text" id="buscaEstoque" placeholder="🔎 Buscar produto...">
+        </div>
+        <div class="card">
+          <div class="tabela-wrap"><table id="tabelaEstoque">
+            <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque Atual</th><th>Situação</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+
+      <!-- ---------- PERFIL ---------- -->
+      <section class="secao" id="secao-perfil">
+        <div class="cabecalho-secao">
+          <div><h2>Meu Perfil</h2><p>Gerencie seus dados de acesso.</p></div>
+        </div>
+        <div class="card painel" style="max-width:420px;">
+          <div class="perfil-avatar-grande" id="perfilAvatar">?</div>
+          <div style="text-align:center; margin-bottom:18px;">
+            <div style="font-weight:800; font-size:16px;" id="perfilNome">-</div>
+            <div style="color:var(--texto-suave); font-size:13px;" id="perfilLogin">-</div>
+          </div>
+          <h3>Alterar Senha</h3>
+          <div class="campo"><label>Senha Atual</label><input type="password" id="senhaAtual"></div>
+          <div class="campo"><label>Nova Senha</label><input type="password" id="novaSenha" placeholder="mínimo 6 caracteres"></div>
+          <div class="campo"><label>Confirmar Nova Senha</label><input type="password" id="confirmaSenha"></div>
+          <button class="btn-primario" id="btnAlterarSenha" style="width:100%;">Salvar Nova Senha</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay-modal" id="modalComprovante">
+  <div class="modal">
+    <div class="modal-cabecalho"><h3>Comprovante da Venda</h3><button class="btn-icone" onclick="fecharModal('modalComprovante')">✕</button></div>
+    <div class="modal-corpo" id="corpoComprovante"></div>
+    <div class="modal-rodape">
+      <button class="btn-secundario" id="btnBaixarPdfComprovante" style="display:none;">⬇️ Baixar em PDF</button>
+      <button class="btn-primario" onclick="fecharModal('modalComprovante')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../shared/ui.js"></script>
+<script src="vendedor.js"></script>
+</body>
+</html>
